@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Routes, Route, Link, useMatch} from 'react-router-dom'
+import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -15,14 +15,17 @@ const Menu = () => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
+const AnecdoteList = ({ anecdotes }) => {
+  console.log('anecdotes passed to list: ', anecdotes)
+ return (
   <div>
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
     </ul>
   </div>
-)
+ )
+}
 
 const About = () => (
   <div>
@@ -50,7 +53,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -60,6 +63,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/')
   }
 
   return (
@@ -105,9 +109,10 @@ const App = () => {
 
   // const [notification, setNotification] = useState('')
   const match = useMatch('/anecdotes/:id')
-  console.log(match)
+  
   const addNew = (anecdote) => {
-    anecdote.id = (Math.random() * 10000).toFixed(0)
+    anecdote.id = parseInt((Math.random() * 10000).toFixed(0))
+    console.log('addNew - ancecdote = ', anecdote)
     setAnecdotes(anecdotes.concat(anecdote))
   }
 
