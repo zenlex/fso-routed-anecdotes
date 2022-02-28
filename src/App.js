@@ -17,14 +17,14 @@ const Menu = () => {
 
 const AnecdoteList = ({ anecdotes }) => {
   console.log('anecdotes passed to list: ', anecdotes)
- return (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
-    </ul>
-  </div>
- )
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map(anecdote => <li key={anecdote.id} ><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
+      </ul>
+    </div>
+  )
 }
 
 const About = () => (
@@ -80,7 +80,7 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
         <button>create</button>
       </form>
@@ -107,13 +107,15 @@ const App = () => {
     }
   ])
 
-  // const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState('')
   const match = useMatch('/anecdotes/:id')
-  
+
   const addNew = (anecdote) => {
     anecdote.id = parseInt((Math.random() * 10000).toFixed(0))
     console.log('addNew - ancecdote = ', anecdote)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote: ${anecdote.content} created!`)
+    setTimeout(() => setNotification(''), 5000)
   }
 
   const anecdoteById = (id) =>
@@ -132,15 +134,17 @@ const App = () => {
 
   return (
     <div>
+      <p>
+        {notification}
+      </p>
       <h1>Software anecdotes</h1>
 
       <Menu />
-      {/* <AnecdoteList anecdotes={anecdotes} /> */}
       <Routes>
         <Route path='/create' element={<CreateNew addNew={addNew} />} />
-        <Route path='/' element={<AnecdoteList anecdotes={anecdotes}/>} />
+        <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
-        <Route path='/anecdotes/:id' element={<AnecdoteList anecdotes={match ? [anecdoteById(Number(match.params.id))] : anecdotes}/>} />
+        <Route path='/anecdotes/:id' element={<AnecdoteList anecdotes={match ? [anecdoteById(Number(match.params.id))] : anecdotes} />} />
       </Routes>
       <Footer />
     </div>
